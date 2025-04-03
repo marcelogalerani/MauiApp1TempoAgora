@@ -29,18 +29,19 @@ namespace MauiApp1TempoAgora
                                         $"Nascer do Sol: {t.sunrise} \n" +
                                         $"Por do Sol: {t.sunset} \n" +
                                         $"Temp Máx: {t.temp_max} \n" +
-                                        $"Temp Min: {t.temp_min} \n" +
-                                        $"Descrição: {t.description} \n" +
-                                        $"Veloc. do vento: {t.speed} \n" +
-                                        $"Visibilidade: {t.visibility}";
-                        
+                                        $"Temp Min: {t.temp_min} \n" +                                         
+                                        $"Descrição: {t.description} \n" + // acrescentado descrição.
+                                        $"Veloc. do vento: {t.speed} \n" + // acrescentado velocidade vento.
+                                        $"Visibilidade: {t.visibility}"; // acrescentado visibilidade.
+
 
                         lbl_res.Text = dados_previsao;
 
                     }
                     else
                     {
-                        lbl_res.Text = "Sem dados de Previsão.";
+                        // mensagem específica quando o nome da cidade não for encontrado.
+                        lbl_res.Text = $"Sem dados de Previsão para: {txt_cidade.Text}";
                     }
                 }
                 else
@@ -48,12 +49,18 @@ namespace MauiApp1TempoAgora
                     lbl_res.Text = "Preencha a cidade.";
                 }
             }
-
+            catch (HttpRequestException httpEx)
+            {
+                // Caso haja problemas com a conexão de rede (sem internet)
+                await DisplayAlert("Erro de Conexão", "Parece que você está sem conexão com a internet." +
+                    " Verifique sua rede e tente novamente.", "Ok");
+            }
+           
             catch (Exception ex)
             {
-                await DisplayAlert("Ops", ex.Message, "Ok");
+                // Caso haja outros tipos de exceção inesperada
+                await DisplayAlert("Ops", ex.Message, "Ok");                           
             }
-
 
         }
     }
